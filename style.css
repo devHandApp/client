@@ -14,6 +14,10 @@ pre, code, kbd {
     border-radius: 1px;
 }
 
+pre {
+    display: block;
+}
+
 #answer {
     border: 1px solid #f39c12;
     border-radius: 3px;

@@ -25,8 +25,6 @@ def on_stackoverflow(data):
         with open("style.css") as css_file:
             css = css_file.read()
 
-            print(data["html"])
-
             html = f"""<!DOCTYPE html>
             <html>
                 <head>
@@ -37,7 +35,7 @@ def on_stackoverflow(data):
                 </head>
                 <body>
                     <div id="answer">
-                        <h3 style="answer-heading">BEST ANSWER ({data['score']}</h3>
+                        <h3 style="answer-heading">BEST ANSWER ({data['score']})</h3>
                         {data['html']}
                     </div>
                 </body>
