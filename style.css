@@ -18,7 +18,7 @@ pre {
     display: block;
 }
 
-#answer {
+.answer {
     border: 1px solid #f39c12;
     border-radius: 3px;
     padding: 5px;

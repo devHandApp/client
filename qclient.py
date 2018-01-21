@@ -66,9 +66,7 @@ class SocketListener(QThread):
             with open("style.css") as css_file:
                 css = css_file.read()
 
-                print(data["html"])
-
-                html = f"""<!DOCTYPE html>
+                html = (f"""<!DOCTYPE html>
                 <html>
                     <head>
                         <title>{data['query']}</title>
@@ -77,15 +75,24 @@ class SocketListener(QThread):
                         </style>
                     </head>
                     <body>
-                        <div id="answer">
-                            <h3 style="answer-heading">BEST ANSWER ({data['score']} points)</h3>
-                            {data['html']}
+                        <div style="answer">
+                            <h3 style="answer-heading">BEST ANSWER ({data['answers'][0]['score']} points)</h3>
+                            {data['answers'][0]['html']}
+                        </div>"""
+                + '\n'.join([f"""
+                        <hr />
+                        <div style="answer">
+                            <h3 style="answer-heading">OTHER ANSWER ({i['score']} points)</h3>
+                            {i['html']}
+                        </div>
+                """ for i in data["answers"][1:]])
+                + f"""
                         </div>
                     </body>
                 </html>
-                """
+                """)
 
-            self.signal.emit(html, data["link"])
+            self.signal.emit(html, data["answers"][0]["link"])
 
 
 widget = AnswerView()
