@@ -37,7 +37,7 @@ def on_stackoverflow(data):
                 </head>
                 <body>
                     <div id="answer">
-                        <h3 style="answer-heading">BEST ANSWER</h3>
+                        <h3 style="answer-heading">BEST ANSWER ({data['score']}</h3>
                         {data['html']}
                     </div>
                 </body>
