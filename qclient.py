@@ -7,6 +7,7 @@ from PyQt5 import QtWebEngineWidgets
 
 from socketIO_client import SocketIO, LoggingNamespace
 import threading
+import webbrowser
 
 
 app = QApplication(sys.argv)
@@ -20,18 +21,24 @@ class AnswerView(QtWidgets.QDialog):
 
         self.ui = uic.loadUi("answerview.ui")
 
+        self.ui.openBrowserButton.clicked.connect(self.open_in_browser)
+
         self.thread = SocketListener()
         self.thread.signal.connect(self.update_html)
         self.thread.start()
 
-    def update_html(self, html):
+    def update_html(self, html, url):
+        self.url = url
         self.ui.textBrowser.setText(html)
         self.ui.show()
+
+    def open_in_browser(self):
+        webbrowser.open(self.url)
 
 
 
 class SocketListener(QThread):
-    signal = QtCore.pyqtSignal(str)
+    signal = QtCore.pyqtSignal(str, str)
 
     def __init__(self, parent = None):
         super(SocketListener, self).__init__(parent)
@@ -53,11 +60,6 @@ class SocketListener(QThread):
 
     def on_stackoverflow(self, data):
         if data["devHand"] == True:
-            try:
-                webview.destroy_window()
-            except Exception:
-                pass
-
             print("Received StackOverflow question:", data["query"])
             #webbrowser.open(data["link"])
 
@@ -83,7 +85,7 @@ class SocketListener(QThread):
                 </html>
                 """
 
-            self.signal.emit(html)
+            self.signal.emit(html, data["link"])
 
 
 widget = AnswerView()
